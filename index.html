@@ -1,0 +1,81 @@
+<style>
+  body {
+    background: #000;
+  }
+
+  canvas {
+    max-width: 100vw;
+    max-height: 50vh;
+  }
+
+  .canvas-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .spacer {
+    width: 100%;
+    height: 100vh;
+    background: coral;
+  }
+</style>
+
+<div class="spacer"></div>
+<div class="canvas-container">
+  <canvas id="hero-lightpass" />
+</div>
+<div class="spacer"></div>
+
+<script src="https://unpkg.co/gsap@3/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+<script>
+  console.clear();
+
+  const canvas = document.getElementById("hero-lightpass");
+  const context = canvas.getContext("2d");
+
+  canvas.width = 1158;
+  canvas.height = 770;
+
+  const frameCount = 62;
+  const currentFrame = (index) =>
+    `http://127.0.0.1:5500/ezgif-3-205af0aa1b-jpg/ezgif-frame-${(index + 1)
+      .toString()
+      .padStart(3, "0")}.jpg`;
+
+  const images = [];
+  const airpods = {
+    frame: 0,
+  };
+
+  for (let i = 0; i < frameCount; i++) {
+    const img = new Image();
+    img.src = currentFrame(i);
+    images.push(img);
+  }
+
+  gsap.to(airpods, {
+    frame: frameCount - 1,
+    snap: "frame",
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".canvas-container",
+      start: "top top",
+      end: "+=3500",
+      markers: true,
+      pin: true,
+      scrub: 0.5,
+    },
+    onUpdate: render, // use animation onUpdate instead of scrollTrigger's onUpdate
+  });
+
+  images[0].onload = render;
+
+  function render() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(images[airpods.frame], 0, 0);
+  }
+</script>
