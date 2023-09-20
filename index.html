@@ -62,11 +62,11 @@
   gsap.to(airpods, {
     frame: frameCount - 1,
     snap: "frame",
-    ease: "none",
+    ease: "ease",
     scrollTrigger: {
       trigger: ".canvas-container",
       start: "top top",
-      end: "+=3500",
+      end: "+=1500",
       markers: true,
       pin: true,
       scrub: 0.5,
